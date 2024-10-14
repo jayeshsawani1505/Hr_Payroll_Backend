@@ -79,10 +79,10 @@ const userProfile = async (req, res) => {
   }
 }
 const verifyPassword = async (req, res) => {
-  const { userId, password } = req.body;
+  const { _id, password } = req.body;
 
   try {
-    const user = await UserModel.findById(userId);
+    const user = await UserModel.findById(_id);
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
