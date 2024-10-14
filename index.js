@@ -14,6 +14,7 @@ const BranchRoute = require("./routes/BranchRoutes")
 const Contractor = require("./routes/Contract")
 const LocationMaster = require("./routes/LocationRoutes")
 const EmployeeMaster = require("./routes/EmployeeRoutes")
+const CalculationMasterRoutes = require("./routes/calculationMasterRoutes")
 
 const XLSX = require('xlsx');
 const fs = require('fs');
@@ -41,6 +42,7 @@ app.use("/api/branch", BranchRoute)
 app.use("/api/contract", Contractor)
 app.use("/api/location", LocationMaster)
 app.use("/api/employee", EmployeeMaster)
+app.use('/api/calculation-master', CalculationMasterRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server Running On Port ${PORT}`)
