@@ -17,7 +17,7 @@ const registerUser = async (req, res) => {
     const user = new UserModel({
       email,
       username,
-      password, 
+      password,
       mobile_number,
       role
     });
@@ -66,18 +66,40 @@ const loginUser = async (req, res) => {
   }
 };
 
-const userProfile = async (req,res)=>{
-  try{
+const userProfile = async (req, res) => {
+  try {
     const userId = req.user;
     const UserDetail = await UserModel.findById(userId._id).select("-password")
 
-    return res.status(200).json({data:UserDetail})
+    return res.status(200).json({ data: UserDetail })
 
-  }catch(error){
+  } catch (error) {
     console.log(error)
-    return res.status(500).json({message:error})
+    return res.status(500).json({ message: error })
   }
 }
+const verifyPassword = async (req, res) => {
+  const { userId, password } = req.body;
+
+  try {
+    const user = await UserModel.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const isMatch = await user.comparePassword(password);
+
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Invalid password' });
+    }
+
+    return res.status(200).json({ message: 'Password is valid' });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: error.message });
+  }
+};
 
 
 const generateToken = (id) => {
@@ -87,5 +109,6 @@ const generateToken = (id) => {
 module.exports = {
   registerUser,
   loginUser,
-  userProfile
+  userProfile,
+  verifyPassword
 };
