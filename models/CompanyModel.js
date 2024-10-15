@@ -129,7 +129,7 @@ const CompanySchema = new mongoose.Schema({
     R_country:{
         type:String
     },
-    phone_o:{
+    Location_Name:{
         type:String
     },
     phone_f:{

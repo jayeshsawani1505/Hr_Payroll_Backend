@@ -30,7 +30,7 @@ const ContractorMasterSchema = new mongoose.Schema({
     Country:{
         type:String
     },
-    Phone_o:{
+    Location_Name:{
         type:String
     },
     Phone_f:{

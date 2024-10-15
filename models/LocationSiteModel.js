@@ -6,7 +6,7 @@ const LocationSiteSchema = new mongoose.Schema({
     Location_No:{
         type:String
     },
-    Phone_o:{
+    Location_Name:{
         type:String
     },
     Phone_f:{
