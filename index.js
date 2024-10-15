@@ -20,21 +20,34 @@ const XLSX = require('xlsx');
 const fs = require('fs');
 const path = require('path');
 
-// Body parsing middleware
-app.use(express.json());
+const allowedOrigins = [
+  'http://localhost:3000', 
+  'https://hr-payroll-frontend-ht4kbd3zm-aj-tech-solution.vercel.app'
+];
 
-// CORS configuration
 const corsOptions = {
-  origin: ['http://localhost:3000', 'https://hr-payroll-frontend-ht4kbd3zm-aj-tech-solution.vercel.app'], // Specify the allowed origin or list multiple origins here
-  methods: "GET,POST,PUT,DELETE,OPTIONS", // Allow specific HTTP methods
-  allowedHeaders: "Content-Type,Authorization", // Allow specific headers
-  preflightContinue: false, // Pass the preflight response to the next handler
-  optionsSuccessStatus: 204 // Some legacy browsers (IE11) choke on 204
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+
+    // Check if the request's origin is in the allowed origins list
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: "GET,POST,PUT,DELETE,OPTIONS", // Allowed HTTP methods
+  allowedHeaders: "Content-Type,Authorization", // Allowed headers
+  credentials: true, // Allow credentials (cookies, authorization headers)
+  preflightContinue: false, // Pass preflight response to next handler
+  optionsSuccessStatus: 204 // IE11 and legacy browsers compatibility
 };
 
+// Enable CORS with the options for all routes
 app.use(cors(corsOptions));
 
-// Handle preflight requests (for browsers that use OPTIONS)
+// Handle preflight requests (OPTIONS)
 app.options('*', cors(corsOptions));
 
 // MongoDB connection
