@@ -19,24 +19,23 @@ const LogsRoutes = require("./routes/logRoutes")
 const XLSX = require('xlsx');
 const fs = require('fs');
 const path = require('path');
-const allowedOrigins = [
-  'http://localhost:3000', 
-  'https://hr-payroll-frontend-ht4kbd3zm-aj-tech-solution.vercel.app'
-];
+
 // Body parsing middleware
 app.use(express.json());
 
 // CORS configuration
 const corsOptions = {
-  origin: allowedOrigins || '*', // Use an environment variable or allow all origins
+  origin: "*", // Specify the allowed origin or list multiple origins here
   methods: "GET,POST,PUT,DELETE,OPTIONS", // Allow specific HTTP methods
   allowedHeaders: "Content-Type,Authorization", // Allow specific headers
   preflightContinue: false, // Pass the preflight response to the next handler
   optionsSuccessStatus: 204 // Some legacy browsers (IE11) choke on 204
 };
 
-// Use CORS middleware
 app.use(cors(corsOptions));
+
+// Handle preflight requests (for browsers that use OPTIONS)
+app.options('*', cors(corsOptions));
 
 // MongoDB connection
 const DbConnect = async () => {
