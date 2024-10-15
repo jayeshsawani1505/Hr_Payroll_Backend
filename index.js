@@ -25,7 +25,7 @@ app.use(express.json());
 
 // CORS configuration
 const corsOptions = {
-  origin: "*", // Specify the allowed origin or list multiple origins here
+  origin: ['http://localhost:3000', 'https://hr-payroll-frontend-ht4kbd3zm-aj-tech-solution.vercel.app'], // Specify the allowed origin or list multiple origins here
   methods: "GET,POST,PUT,DELETE,OPTIONS", // Allow specific HTTP methods
   allowedHeaders: "Content-Type,Authorization", // Allow specific headers
   preflightContinue: false, // Pass the preflight response to the next handler
