@@ -1,6 +1,6 @@
 const LocationMaster = require("../models/LocationSiteModel");
 
- 
+
 
 // Create a new location
 exports.createLocation = async (req, res) => {
@@ -42,42 +42,40 @@ exports.deleteLocation = async (req, res) => {
 };
 
 exports.AllLocation = async (req, res) => {
+    const { CompanyId } = req.query; // Extract CompanyId from query params
     try {
-        // Fetch all locations from the database
-        const AllLocation = await LocationMaster.find();
-
+        // Fetch locations based on CompanyId (assuming CompanyId is a string)
+        const locations = await LocationMaster.find({ CompanyId });
         // Check if any locations are found
-        if (AllLocation.length === 0) {
+        if (locations.length === 0) {
             return res.status(404).json({ message: "No locations found." });
         }
-
-       
-        res.status(200).json(AllLocation);
+        // Return the found locations
+        res.status(200).json(locations);
     } catch (error) {
-        
         res.status(400).json({ message: "Error fetching locations", error: error.message });
     }
 };
 
 exports.LocationView = async (req, res) => {
     try {
-      const { id } = req.params;
-  
-      // Fetch location details using the ID
-      const fetchedLocation = await LocationMaster.findById(id);
-  
-      // Check if the location exists
-      if (!fetchedLocation) {
-        return res.status(404).json({ message: "Location not found" });
-      }
-  
-      // Send the fetched location data as a response
-      res.status(200).json(fetchedLocation);
+        const { id } = req.params;
+
+        // Fetch location details using the ID
+        const fetchedLocation = await LocationMaster.findById(id);
+
+        // Check if the location exists
+        if (!fetchedLocation) {
+            return res.status(404).json({ message: "Location not found" });
+        }
+
+        // Send the fetched location data as a response
+        res.status(200).json(fetchedLocation);
     } catch (error) {
-      // Handle any errors
-      console.log(error);
-      res.status(500).json({ message: "Error fetching location", error: error.message });
+        // Handle any errors
+        console.log(error);
+        res.status(500).json({ message: "Error fetching location", error: error.message });
     }
-  };
-  
+};
+
 

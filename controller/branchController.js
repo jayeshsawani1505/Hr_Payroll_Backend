@@ -45,15 +45,15 @@ const deleteBranch = async (req, res) => {
 
 
 const FetchAllBranch = async (req, res) => {
+    const { CompanyId } = req.query; // Extract CompanyId from query params
     try {
-        const branches = await BranchModel.find();
+        const branches = await BranchModel.find({ CompanyId }); // No need for ObjectId conversion if it's a string
         return res.status(200).json(branches); 
     } catch (error) {
         console.log(error);
         return res.status(500).json({ message: "An error occurred while fetching branches." }); 
     }
 };
-
 
 const ViewBranch = async (req, res) => {
     try {

@@ -3,7 +3,7 @@ const ContractorMaster = require('../models/ContractorModel');
 const multer = require('multer');
 
 const router = express.Router();
-const storage = multer.memoryStorage();  
+const storage = multer.memoryStorage();
 const upload = multer({ storage });
 const xlsx = require('xlsx');
 
@@ -47,8 +47,9 @@ router.delete('/delete/:id', async (req, res) => {
 });
 
 router.get("/all", async (req, res) => {
+    const { CompanyId } = req.query; // Extract CompanyId from query parameters
     try {
-        const allContracts = await ContractorMaster.find();
+        const allContracts = await ContractorMaster.find({ CompanyId });
         if (!allContracts || allContracts.length === 0) {
             return res.status(404).json({ message: "No contracts found." });
         }
@@ -59,11 +60,12 @@ router.get("/all", async (req, res) => {
     }
 });
 
+
 router.get("/view/:id", async (req, res) => {
     try {
         const { id } = req.params;
 
-   
+
         const fetchedData = await ContractorMaster.findById(id);
 
 
@@ -161,7 +163,7 @@ router.post('/parse-excel', upload.single('file'), (req, res) => {
         const workbook = xlsx.read(req.file.buffer, { type: 'buffer' });
         const sheetName = workbook.SheetNames[0];
         const sheet = workbook.Sheets[sheetName];
-        
+
         const contractors = xlsx.utils.sheet_to_json(sheet);
 
         res.status(200).json({ success: true, data: contractors });
@@ -174,7 +176,7 @@ router.post('/parse-excel', upload.single('file'), (req, res) => {
 router.post('/bulk-save/:companyId', async (req, res) => {
     try {
         const contractors = req.body;
-        const { companyId } = req.params; 
+        const { companyId } = req.params;
 
         if (!Array.isArray(contractors) || contractors.length === 0) {
             return res.status(400).json({ message: "No data to save" });
@@ -197,8 +199,8 @@ router.post('/bulk-save/:companyId', async (req, res) => {
 router.get('/next-contractor-no', async (req, res) => {
     try {
         const lastContractor = await ContractorMaster.findOne().sort({ createdAt: -1 }).select('Contractor_No');
-        
-        let nextContractorNo = "1"; 
+
+        let nextContractorNo = "1";
 
         if (lastContractor) {
             nextContractorNo = (parseInt(lastContractor.Contractor_No) + 1).toString();
