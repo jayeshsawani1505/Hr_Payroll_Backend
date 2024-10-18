@@ -2,8 +2,12 @@ const CalculationMaster = require('../models/CalculationMaster');
 
 // GET all records
 exports.getAllRecords = async (req, res) => {
+    const { CompanyId } = req.query;
     try {
-        const records = await CalculationMaster.find();
+        const records = await CalculationMaster.find({ CompanyId });
+        if (records.length === 0) {
+            return res.status(404).json({ message: "No records found for this CompanyId." });
+        }
         res.json({
             message: "Records retrieved successfully",
             data: records

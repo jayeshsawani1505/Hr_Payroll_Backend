@@ -63,18 +63,30 @@ router.post('/create-employee', upload.fields([
 router.get('/employees/:companyId', async (req, res) => {
     try {
         const { companyId } = req.params;
+
+        // Validate companyId
+        if (!companyId) {
+            return res.status(400).json({ message: 'Company ID is required.' });
+        }
+
+        // Fetch employees based on the companyId
         const employees = await EmployeeModel.find({ CompanyId: companyId });
 
-        if (!employees.length) {
+        // Check if no employees are found
+        if (!employees || employees.length === 0) {
             return res.status(404).json({ message: 'No employees found for this company.' });
         }
 
-        res.status(200).json(employees);
+        res.status(200).json({
+            message: `${employees.length} employees found for company ${companyId}.`,
+            employees: employees
+        });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Failed to retrieve employees', error });
+        console.error('Error fetching employees:', error);
+        res.status(500).json({ message: 'Failed to retrieve employees', error: error.message });
     }
 });
+
 
 
 router.get('/next-sr-emp', async (req, res) => {
@@ -238,6 +250,7 @@ router.post('/create-employees/:companyId', async (req, res) => {
 
             employee.Employee_Salary = {
                 Consolidated_Salary: employee.Consolidated_Salary,
+                Consolidated_Pay_Rate: employee.Consolidated_Pay_Rate,
                 Pay_Rate: employee.Pay_Rate,
                 DA_Rate: employee.DA_Rate,
                 Per_Hour_Calculation: employee.Per_Hour_Calculation,

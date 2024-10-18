@@ -7,6 +7,9 @@ const EmpployeeSalarySchema = new mongoose.Schema({
     Consolidated_Salary:{
         type:String
     },
+    Consolidated_Pay_Rate:{
+        type:String
+    },
     Pay_Rate:{
         type:String
     },

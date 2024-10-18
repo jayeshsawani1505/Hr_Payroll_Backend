@@ -3,7 +3,7 @@ const router = express.Router();
 const CalculationMasterController = require('../controller/CalculationMasterController');
 
 // Route to get all records
-router.get('/', CalculationMasterController.getAllRecords);
+router.get('/get', CalculationMasterController.getAllRecords);
 
 // Route to get a specific record by ID
 router.get('/:id', CalculationMasterController.getRecordById);
